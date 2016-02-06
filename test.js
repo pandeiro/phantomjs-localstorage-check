@@ -2,23 +2,33 @@
 
 var page = require('webpage').create();
 
-page.open('http://www.httpuseragent.org', function(status) {
+page.open('http://www.httpuseragent.org', function (status) {
 
-  if (status !== 'success') {
+    if (status !== 'success') {
 
-    console.log('Unable to access network');
+        console.log('Unable to access network');
 
-  } else {
+    }
+    else {
 
-    var localStorageObj = page.evaluate(function() {
-      localStorage.setItem('foo', '{"storage": "works"}');
-      return JSON.parse(localStorage.getItem('foo'));
-    });
+        var localStorageObj = page.evaluate(function () {
+            localStorage.setItem('foo', '{"storage": "works"}');
+            return JSON.parse(localStorage.getItem('foo'));
+        });
 
-    console.log(localStorageObj.storage);
+        console.log(localStorageObj.storage);
 
-  }
+    }
 
-  phantom.exit();
+    // localStorage.clear
+    if (page.evaluate(function () {
+            window.localStorage.clear();
+            return JSON.parse(localStorage.getItem('foo'));
+        }) == false
+    ) {
+        console.log('localStorage.clear successful');
+    }
+
+    phantom.exit();
 
 });
